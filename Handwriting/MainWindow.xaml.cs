@@ -21,12 +21,12 @@ namespace Handwriting
     {
         private String OpenFile = null;
         private String OpenSettings = null;
+        private Drawer drawer = new Drawer();
 
         private Dictionary<String, TextBox> SettingsNameMapping = new Dictionary<String, TextBox>();
         public MainWindow()
         {
             InitializeComponent();
-
             {
                 void m(String name,TextBox box)
                 {
@@ -53,7 +53,9 @@ namespace Handwriting
                 m("PaperBottom", this.PaperBottom);
 
                 m("WrongChar", this.WrongCharProbability);
-            }     
+
+            
+            }
         }
 
         private void ReadSettings(String path)
@@ -101,7 +103,6 @@ namespace Handwriting
 
             doc.Save(path);
         }
-
         /// <summary>
         /// 菜单事件 - 读取文本
         /// </summary>
@@ -204,6 +205,28 @@ namespace Handwriting
         private void MenuItem_Exit(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+        /// <summary>
+        /// 菜单事件 - 关于
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MenuItem_Feedback(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/mslxl/Handwriting/issues/new");
+        }
+        /// <summary>
+        /// 菜单事件 - 构建图片
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MenuItem_BuildImage(object sender, RoutedEventArgs e)
+        {
+
+            TextInputBox.Text.ToCharArray().ToList().ForEach(it =>
+            {
+                RecordCharacterWindow.RequestCharacterRoute(it);
+            });
         }
     }
 }

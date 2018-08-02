@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Handwriting"
         mc:Ignorable="d"
-        Title="MainWindow" Height="598.828" Width="1007.422">
+        Title="Handwriting" Height="600" Width="1000">
  
     <Grid>
         <DockPanel LastChildFill="True">
@@ -26,14 +26,13 @@
                     
                 </MenuItem>
                 <MenuItem Header="_Build">
-                    <MenuItem Header="Butid _Image"/>
+                    <MenuItem Header="Butid _Image" MenuItem.Click="MenuItem_BuildImage"/>
                     <MenuItem Header="_Clear Build"/>
                     <Separator/>
                     <MenuItem Header="_Preview First Page"/>
                 </MenuItem>
                 <MenuItem Header="_Help">
-                    <MenuItem Header="_About"/>
-                    <MenuItem Header="_Send Feedback"/>
+                    <MenuItem Header="_Send Feedback" MenuItem.Checked="MenuItem_Feedback"/>
                     <MenuItem Header="_View Help"/>
                 </MenuItem>
             </Menu>
