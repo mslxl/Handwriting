@@ -222,11 +222,22 @@ namespace Handwriting
         /// <param name="e"></param>
         private void MenuItem_BuildImage(object sender, RoutedEventArgs e)
         {
-
-            TextInputBox.Text.ToCharArray().ToList().ForEach(it =>
+            var drawer = new Drawer();
+            drawer.SetMargin(int.Parse(PaperLeft.Text),int.Parse(PaperRight.Text),int.Parse(PaperTop.Text),int.Parse(PaperBottom.Text));
+            drawer.SetSpacing(int.Parse(LineSpacing.Text), int.Parse(WordSpacing.Text));
+            drawer.SetPen(int.Parse(FontSize.Text), int.Parse(PenSize.Text));
+            drawer.CreatePaperTemplate(int.Parse(PaperWidth.Text), int.Parse(PaperHeight.Text));
+            drawer.InitAllRoutes(TextInputBox.Text);
+            var canvas = drawer.Draw();
+            int index = 0;
+            foreach(var item in canvas)
             {
-                RecordCharacterWindow.RequestCharacterRoute(it);
-            });
+                var tab = new TabItem();
+                tab.Header = string.Format("Page {0}", ++index);
+                tab.Content = item;
+
+                TabPanel.Items.Add(tab);
+            }
         }
     }
 }

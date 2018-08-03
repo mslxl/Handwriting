@@ -17,11 +17,11 @@ namespace Handwriting
     /// <summary>
     /// Interaction logic for RecordCharacter.xaml
     /// </summary>
-    public partial class RecordCharacterWindow : Window
+    public partial class RecordCharacter : Window
     {
         private char character;
         private List<RelativeRoute> routes;
-        public RecordCharacterWindow(char c)
+        public RecordCharacter(char c)
         {
             InitializeComponent();
 
@@ -47,9 +47,31 @@ namespace Handwriting
 
         public static List<RelativeRoute> RequestCharacterRoute(char c)
         {
-            var win = new RecordCharacterWindow(c);
+            var win = new RecordCharacter(c);
             win.ShowDialog();
-            return win.routes;
+            return optimizationRoute(win.routes);
+        }
+
+        private static List<RelativeRoute> optimizationRoute(List<RelativeRoute> list)
+        {
+            int minY = int.MaxValue;
+            int minX = int.MaxValue;
+            foreach(var route in list)
+            {
+                if (route.StartX < minX && route.StartX >= 0) minX = route.StartX;
+                if (route.StartY < minY && route.StartY >= 0) minY = route.StartY;
+                if (route.EndX < minX && route.EndX >= 0) minX = route.EndX;
+                if (route.EndY < minY && route.EndY >= 0) minY = route.EndY;
+            }
+            return list.Select((RelativeRoute route) =>
+            {
+                return new RelativeRoute(
+                    route.StartX - minX,
+                    route.StartY - minY,
+                    route.EndX - minX,
+                    route.EndY - minY);
+
+            }).ToList();
         }
     }
 }

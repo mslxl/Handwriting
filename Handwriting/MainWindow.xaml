@@ -72,9 +72,9 @@
                                     <RowDefinition Height="200*"></RowDefinition>
                                 </Grid.RowDefinitions>
                                 <Label Content="Word spacing" Grid.Column="0" Grid.Row="0"/>
-                                <TextBox x:Name="WordSpacing" Grid.Column="1" Grid.Row="0" Text="100" TextAlignment="Center"/>
+                                <TextBox x:Name="WordSpacing" Grid.Column="1" Grid.Row="0" Text="10" TextAlignment="Center"/>
                                 <Label Content="Line spacing" Grid.Column="0" Grid.Row="1"/>
-                                <TextBox x:Name="LineSpacing" Grid.Column="1" Grid.Row="1" Text="150" TextAlignment="Center"/>
+                                <TextBox x:Name="LineSpacing" Grid.Column="1" Grid.Row="1" Text="20" TextAlignment="Center"/>
                             </Grid>
 
                         </Expander>
@@ -156,7 +156,7 @@
             </Border>
 
             <TextBox x:Name="TextInputBox" DockPanel.Dock="Bottom" Height="150" IsEnabled="True" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible"/>
-            <TabControl DockPanel.Dock="Left" >
+            <TabControl x:Name="TabPanel" DockPanel.Dock="Left" >
                 
             </TabControl>
         </DockPanel>
