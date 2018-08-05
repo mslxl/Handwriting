@@ -31,8 +31,13 @@ namespace Handwriting
 
         public List<RelativeRoute> RequestCharacterWithTcp(char c)
         {
+            byte[] b = new byte[2];
+            b[0] = (byte)((c & 0xFF00) >> 8);
+            b[1] = (byte)(c & 0xFF);
+            Socket.Send(b);
+
             var list = new List<RelativeRoute>();
-            byte[] b = new byte[4];
+            b = new byte[4];
             var end = false;
             do
             {

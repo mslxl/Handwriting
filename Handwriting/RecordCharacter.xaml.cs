@@ -49,29 +49,9 @@ namespace Handwriting
         {
             var win = new RecordCharacter(c);
             win.ShowDialog();
-            return optimizationRoute(win.routes);
+            return win.routes;
         }
 
-        private static List<RelativeRoute> optimizationRoute(List<RelativeRoute> list)
-        {
-            int minY = int.MaxValue;
-            int minX = int.MaxValue;
-            foreach(var route in list)
-            {
-                if (route.StartX < minX && route.StartX >= 0) minX = route.StartX;
-                if (route.StartY < minY && route.StartY >= 0) minY = route.StartY;
-                if (route.EndX < minX && route.EndX >= 0) minX = route.EndX;
-                if (route.EndY < minY && route.EndY >= 0) minY = route.EndY;
-            }
-            return list.Select((RelativeRoute route) =>
-            {
-                return new RelativeRoute(
-                    route.StartX - minX,
-                    route.StartY - minY,
-                    route.EndX - minX,
-                    route.EndY - minY);
-
-            }).ToList();
-        }
+       
     }
 }

@@ -7,7 +7,7 @@ namespace Handwriting
 {
     public class RelativeRoute
     {
-        public RelativeRoute(int startX, int startY, int endX, int endY)
+        public RelativeRoute(double startX, double startY, double endX, double endY)
         {
             this.StartX = startX;
             this.StartY = startY;
@@ -15,10 +15,10 @@ namespace Handwriting
             this.EndY = endY;
         }
 
-        public int StartX;
-        public int StartY;
-        public int EndX;
-        public int EndY;
+        public double StartX;
+        public double StartY;
+        public double EndX;
+        public double EndY;
 
         public override string ToString()
         {
@@ -33,13 +33,13 @@ namespace Handwriting
     public class CharacterRouteInfo
     {
         public List<RelativeRoute> Routes;
-        public int Height;
-        public int Width;
+        public double Height;
+        public double Width;
         public CharacterKind Kind = CharacterKind.General;
         public int Num = 1;
         public CharacterRouteInfo(List<RelativeRoute> routes)
         {
-            this.Routes = routes;
+            this.Routes = optimizationRoute(routes);
             foreach(var r in routes)
             {
                 var w = r.StartX > r.EndX ? r.StartX : r.EndX;
@@ -49,19 +49,43 @@ namespace Handwriting
             }
         }
 
-        public static CharacterRouteInfo operator *(CharacterRouteInfo a, int b)
+        public static CharacterRouteInfo operator *(CharacterRouteInfo a, double b)
         {
             if (a.Kind == CharacterKind.General)
             {
                 var routes = a.Routes.Select((RelativeRoute route) =>
                 {
-                    return new RelativeRoute(route.StartX * b, route.StartY * b, route.EndX * b, route.EndY * b);
+                    var r = new RelativeRoute(route.StartX * b, route.StartY * b, route.EndX * b, route.EndY * b);
+                    Console.WriteLine(string.Format("From {0} to {1}", route, r));
+                    return r;
                 });
-                var newInfo = new CharacterRouteInfo(routes.ToList());
+                var newInfo = new CharacterRouteInfo(optimizationRoute(routes.ToList()));
                 return newInfo;
             }
             
             return a;
+        }
+
+        private static List<RelativeRoute> optimizationRoute(List<RelativeRoute> list)
+        {
+            double minY = double.MaxValue;
+            double minX = double.MaxValue;
+            foreach (var route in list)
+            {
+                if (route.StartX < minX && route.StartX >= 0) minX = route.StartX;
+                if (route.StartY < minY && route.StartY >= 0) minY = route.StartY;
+                if (route.EndX < minX && route.EndX >= 0) minX = route.EndX;
+                if (route.EndY < minY && route.EndY >= 0) minY = route.EndY;
+            }
+            return list.Select((RelativeRoute route) =>
+            {
+                return new RelativeRoute(
+                    route.StartX - minX,
+                    route.StartY - minY,
+                    route.EndX - minX,
+                    route.EndY - minY);
+
+            }).ToList();
         }
     }
     public class CharacterRoute
@@ -138,10 +162,10 @@ namespace Handwriting
 
             foreach(var route in routes)
             {
-                writer.Write(BitConverter.GetBytes(route.StartX), 0, 4);
-                writer.Write(BitConverter.GetBytes(route.StartY), 0, 4);
-                writer.Write(BitConverter.GetBytes(route.EndX), 0, 4);
-                writer.Write(BitConverter.GetBytes(route.EndY), 0, 4);
+                writer.Write(BitConverter.GetBytes((int)route.StartX), 0, 4);
+                writer.Write(BitConverter.GetBytes((int)route.StartY), 0, 4);
+                writer.Write(BitConverter.GetBytes((int)route.EndX), 0, 4);
+                writer.Write(BitConverter.GetBytes((int)route.EndY), 0, 4);
             }
             writer.Flush();
             writer.Close();

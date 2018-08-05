@@ -16,10 +16,10 @@ namespace Handwriting
     class Drawer
     {
         private List<CharacterRouteInfo> list;
-        private int MaxCharHeight;
-        private int AverageCharWidth;
-        private int Width;
-        private int Height;
+        private double MaxCharHeight;
+        private double AverageCharWidth;
+        private double Width;
+        private double Height;
 
         private int FontSize;
         private int FontRouteSize;
@@ -44,7 +44,7 @@ namespace Handwriting
                     var routes = RecordCharacter.RequestCharacterRoute(c);
                     CharacterRoute.SaveRouteByChar(c, routes);
                 }
-                var route = CharacterRoute.GetRouteByChar(c) * FontSize;
+                var route = CharacterRoute.GetRouteByChar(c) * (FontSize / 10.0);
                 if (route.Height > MaxCharHeight) MaxCharHeight = route.Height;
                 AverageCharWidth += route.Width;
                 list.Add(route);
@@ -88,8 +88,8 @@ namespace Handwriting
 
         public List<Canvas> Draw()
         {
-            int PosX = Left;
-            int PosY = Top;
+            double PosX = Left;
+            double PosY = Top;
             var canvases = new List<Canvas>();
             var canvas = CreatePaper();
             foreach (var info in list)
